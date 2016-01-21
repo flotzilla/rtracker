@@ -13,20 +13,23 @@ class RutrackerAPI
     private static $profile_page = 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=';
     private static $main_page = 'http://rutracker.org/forum/';
 
+    //save cookies in tempo directory
     private static $coockies;
     private static $user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0';
 
     private $user_id;
     private $user;
+    private $future_list = array();
 
     function __construct($user, $password)
     {
-        self::$coockies = getcwd() . '/rt_cookie.txt';
+        self::$coockies = getcwd() . '/tmp/rt_cookie.txt';
 
         if (self::login($user, $password)) {
             $this->user = $user;
             //will receive user_id
             $this->parse_user_params();
+            $this->get_future_page();
         } else {
             echo "cannot login";
         }
@@ -124,8 +127,9 @@ class RutrackerAPI
         }
     }
 
-    public function get_future_page()
+    private function get_future_page()
     {
+        $items = array();
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => self::$future_list_page . $this->user_id,
@@ -178,6 +182,7 @@ class RutrackerAPI
                 $iterator++;
             }
 
+            $this->future_list = $items;
             return $items;
         }
 
@@ -214,6 +219,23 @@ class RutrackerAPI
     {
         $this->user = $user;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFutureList()
+    {
+        if(empty($this->future_list)){
+            $this->future_list = $this->get_future_page();
+        }
+        return $this->future_list;
+    }
+
+    public function getFutureListSize(){
+        return count($this->future_list);
+    }
+
+
 
 
 }
