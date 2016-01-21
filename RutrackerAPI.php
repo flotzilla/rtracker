@@ -16,15 +16,17 @@ class RutrackerAPI
     private $user;
     private $future_list = array();
 
-    function __construct($user, $password)
+    function __construct()
     {
         self::$coockies = getcwd() . '/tmp/rt_cookie.txt';
+    }
 
+    public function init_action($user, $password){
         if (self::login($user, $password)) {
             $this->user = $user;
             //will receive user_id
             $this->parse_user_params();
-            $this->get_future_page();
+            $this->getFutureList();
         } else {
             echo "cannot login";
         }
@@ -82,7 +84,7 @@ class RutrackerAPI
         return $is_success;
     }
 
-    private function parse_user_params()
+    public function parse_user_params()
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -116,6 +118,7 @@ class RutrackerAPI
 
             foreach ($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
                 $attr = $item->getAttribute('href');
+                $this->user = $item->nodeValue;
                 $this->user_id = substr($attr, strpos($attr, "&u=") + 3);
             }
 
@@ -200,7 +203,7 @@ class RutrackerAPI
     }
 
     /**
-     * @return mixed
+     * @return String
      */
     public function getUser()
     {
@@ -216,7 +219,7 @@ class RutrackerAPI
     }
 
     /**
-     * @return mixed
+     * @return Array
      */
     public function getFutureList()
     {
@@ -226,6 +229,9 @@ class RutrackerAPI
         return $this->future_list;
     }
 
+    /**
+     * @return int
+     */
     public function getFutureListSize(){
         return count($this->future_list);
     }

@@ -1,26 +1,22 @@
 <?php
-
-include_once "RutrackerAPI.php";
+include "RutrackerAPI.php";
 include "ConfigReader.php";
-
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL ^ E_NOTICE);
 
 $c = new ConfigReader();
 $config = $c->getConfig();
 
 $rt = new RutrackerAPI();
-$rt->init_action(
-    $config['rutracker']['username'],
-    $config['rutracker']['password'])
+$rt->parse_user_params();
+$flist = $rt->getFutureList();
 
 ?>
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rtracker management</title>
+    <title>Rtracker lists</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,14 +53,15 @@ $rt->init_action(
                 </button>
             </a>
 
+
             <ul class="nav navbar-nav navbar-right">
                 <li class="username">
                     <a title="rutracker user"
-                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser()   ?>">
+                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser()  ?>">
                         <?= $rt->getUser()  ?></a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" method="get"
-                action="index.php">
+                  action="index.php">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="type here..."
                            name="search">
@@ -81,17 +78,22 @@ $rt->init_action(
 
     </div>
 </nav>
-
 <div class="container main-cont">
-
-<?
-if(isset($_GET['search'])){
-    $search_str = trim($_GET['search']);
-    echo "Will search " . $search_str;
-}
-?>
+    <div class="col-md-10">
+        <h3><span class="label label-default">From rutracker</span></h3>
+        <ul class="list-unstyled">
+            <?
+            foreach($flist as $p){
+                    echo "<li class=' '><a href='".$p['topic_link']. "'>". $p['topic_name']. "</a>"
+                    . " - <a href='".$p['link']. "'>". $p['name']. "</a></li>";
+            }
+            ?>
+        </ul>
+    </div>
 </div>
+
 
 </body>
 </html>
+
 
