@@ -11,3 +11,5 @@ Runs on your local server
 ##Good to know
 
 File `/tmp/rt_cookie.txt` must be writable
+
+Run ` bower install jquery` and `bower install bootstrap` before first launch

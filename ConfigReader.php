@@ -1,11 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: bitybite
- * Date: 1/21/16
- * Time: 5:02 AM
- */
+
 class ConfigReader
 {
     private static $default_conf_file;

@@ -1,11 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: bitybite
- * Date: 1/20/16
- * Time: 6:12 PM
- */
+
 class RutrackerAPI
 {
     private static $login_page = 'http://login.rutracker.org/forum/login.php';

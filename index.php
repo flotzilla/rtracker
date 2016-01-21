@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bitybite
- * Date: 1/20/16
- * Time: 6:17 PM
- */
 
 include "RutrackerAPI.php";
 include "ConfigReader.php";
