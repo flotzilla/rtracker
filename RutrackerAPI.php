@@ -1,5 +1,4 @@
 <?php
-use Sunra\PhpSimple\HtmlDomParser;
 
 /**
  * Created by PhpStorm.
@@ -12,6 +11,7 @@ class RutrackerAPI
     private static $login_page = 'http://login.rutracker.org/forum/login.php';
     private static $future_list_page = 'http://rutracker.org/forum/search.php?dlw=1&dlu=';
     private static $profile_page = 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=';
+    private static $main_page = 'http://rutracker.org/forum/';
 
     private static $coockies;
     private static $user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0';
@@ -23,11 +23,11 @@ class RutrackerAPI
     {
         self::$coockies = getcwd() . '/rt_cookie.txt';
 
-        if(self::login($user, $password)){
+        if (self::login($user, $password)) {
             $this->user = $user;
             //will receive user_id
             $this->parse_user_params();
-        }else{
+        } else {
             echo "cannot login";
         }
     }
@@ -86,8 +86,6 @@ class RutrackerAPI
 
     private function parse_user_params()
     {
-        $id = false;
-
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => self::$profile_page . $this->user,
@@ -118,9 +116,9 @@ class RutrackerAPI
 
             $xpath = new DOMXpath($dom);
 
-            foreach($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
+            foreach ($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
                 $attr = $item->getAttribute('href');
-                $this->user_id = substr($attr, strpos($attr, "&u=")+3);
+                $this->user_id = substr($attr, strpos($attr, "&u=") + 3);
             }
 
         }
@@ -156,9 +154,31 @@ class RutrackerAPI
             $dom->preserveWhiteSpace = false;
 
             $xpath = new DOMXpath($dom);
-            $futurepage = array();
-                //TODO implement future list
-            return $futurepage;
+            $items = array();
+
+            $iterator = 0;
+            foreach ($xpath->query('//a[@class="topictitle"]') as $item) {
+                $attr = self::$main_page . $item->getAttribute('href');
+                $text = trim(preg_replace("/[\r\n]+/", " ", $item->nodeValue));
+
+//                $seeds = trim(preg_replace("/[\r\n]+/", " ", $xpath->query('//span[@class="seedmed"]')
+//                    ->item($iterator)->nodeValue));
+
+                $topic = $xpath->query('//a[@class="gen f"]')->item($iterator);
+                $topic_name = $topic->nodeValue;
+                $topic_link = self::$main_page . $topic->getAttribute('href');
+
+                $items[$iterator] = [
+                    'link' => $attr,
+                    'name' => $text,
+                    'topic_name' => $topic_name,
+                    'topic_link' => $topic_link
+                ];
+
+                $iterator++;
+            }
+
+            return $items;
         }
 
     }
