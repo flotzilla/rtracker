@@ -112,7 +112,7 @@ if(isset($_GET['search'])){
     if(count($rt_result) !== 0){
         echo count($rt_result). "<br>";
         foreach ($rt_result as $t){
-            echo $t['torrent_text']. "<br>";
+            echo "<a href='".$t['torrent_view_link']. "'>". $t['torrent_text']."</a>'<br>";
         }
     }
 
