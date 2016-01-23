@@ -1,29 +1,22 @@
 <?php
-
-include_once "RutrackerAPI.php";
+include "RutrackerAPI.php";
 include "ConfigReader.php";
-
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL ^ E_NOTICE);
 
 $c = new ConfigReader();
 $config = $c->getConfig();
 
 $rt = new RutrackerAPI();
-$rt->init_action(
-    $config['rutracker']['username'],
-    $config['rutracker']['password']);
 $rt->parse_user_params();
 $flist = $rt->getFutureList();
 
-
 ?>
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rtracker management</title>
+    <title>Rtracker - Config page</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,7 +60,7 @@ $flist = $rt->getFutureList();
                         <?= $rt->getUser()  ?></a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" method="get"
-                action="index.php">
+                  action="index.php">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="type here..."
                            name="search">
@@ -97,33 +90,10 @@ $flist = $rt->getFutureList();
 
     </div>
 </nav>
-
 <div class="container main-cont">
-
-<?
-if(isset($_GET['search'])){
-    $search_str = trim($_GET['search']);
-    echo "<h3 class='align-center'>
-                <span class='glyphicon glyphicon-search'></span>
-                " . $search_str . "
-            </h3>";
-    $rt_result = $rt->search($search_str);
-
-    if(count($rt_result) !== 0){
-        echo "<p> <span class='search-word'>Rutracker</span> Found: ". count($rt_result). " results</p><br>";
-        foreach ($rt_result as $t){
-            if(isset($t['torrent_view_link']) && isset($t['torrent_text'])){
-            echo "<a href='".$t['torrent_view_link']. "'>". $t['torrent_text']."</a>'<br>";
-            }
-        }
-    }else{
-        echo "<p> <span class='search-word'>Rutracker</span> Nothing found</p><br>";
-    }
-
-}
-?>
+    <h2 class="align-center">Config page</h2>
 </div>
+
 
 </body>
 </html>
-
