@@ -69,9 +69,9 @@ class RutrackerAPI
             )
         ));
 
+        //cannot set this params in `curl_setopt_array`
         curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
         curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
-
 
         $resp = curl_exec($curl);
         if (!$resp) {
@@ -123,6 +123,53 @@ class RutrackerAPI
             }
 
         }
+    }
+
+    public function search($search_string, $options=array()){
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FOLLOWLOCATION, 1,
+            CURLOPT_USERAGENT, self::$user_agent,
+            CURLOPT_URL => self::$main_page . "tracker.php",
+            CURLOPT_POST => true,
+            CURLOPT_HEADER => false,
+            CURLOPT_AUTOREFERER => true,
+            CURLOPT_CONNECTTIMEOUT => 120,
+            CURLOPT_TIMEOUT => 120,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_ENCODING => 'en-US,en;q=0.7,ru;q=0.3',
+            CURLOPT_COOKIESESSION, 1,
+        ));
+
+        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
+        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
+
+        //if exist any search options
+        if(empty($options)){
+            curl_setopt($curl, CURLOPT_POSTFIELDS,
+                array(
+                    "nm" => $search_string,
+                )
+            );
+        }else{
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $options);
+        }
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        if (curl_error($curl)) {
+            echo "<br> wrong <br>";
+        } else {
+//            var_dump(utf8_decode($resp));
+            $this->parse_search_result($resp, $search_string);
+        }
+    }
+
+    private function parse_search_result($html, $search_string){
+
     }
 
     private function get_future_page()

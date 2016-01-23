@@ -1,0 +1,21 @@
+Rutracker post search params meaning
+
+f - category (int) -1 by default
+
+nm - search string
+s - sort?
+o - order by search options
+    7 sort by size
+    1 register
+    2 theme name
+    4 - downloads
+    10 - seeds
+    11 - leaches
+    8 - last message
+start - start_page
+
+prev_new - ?
+prev_oop - ?
+pn - by author name
+oop - 1 (opened)
+max - ?

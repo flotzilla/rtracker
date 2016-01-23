@@ -69,12 +69,25 @@ $rt->init_action(
                     <input type="text" class="form-control" placeholder="type here..."
                            name="search">
                 </div>
-                <button type="submit" class="btn btn-success btn-sm">Search</button>
+                <button type="submit" class="btn btn-success btn-sm">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Search
+                </button>
             </form>
 
             <ul class="nav navbar-nav navbar-left">
-                <li class="username"><a href="#">Config</a></li>
-                <li class="username"><a href="#">About</a></li>
+                <li class="username">
+                    <a href="config.php">
+                        <span class="glyphicon glyphicon-cog"></span>
+                        Config
+                    </a>
+                </li>
+                <li class="username">
+                    <a href="about.php">
+                        <span class=" glyphicon glyphicon-info-sign"></span>
+                        About
+                    </a>
+                </li>
             </ul>
 
         </div>
@@ -87,7 +100,11 @@ $rt->init_action(
 <?
 if(isset($_GET['search'])){
     $search_str = trim($_GET['search']);
-    echo "Will search " . $search_str;
+    echo "<h3 class='align-center'>
+                <span class='glyphicon glyphicon-search'></span>
+                <span class='search-word'>" . $search_str . "</span>
+            </h3>";
+    $rt->search($search_str);
 }
 ?>
 </div>

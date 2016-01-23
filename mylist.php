@@ -53,11 +53,10 @@ $flist = $rt->getFutureList();
                 </button>
             </a>
 
-
             <ul class="nav navbar-nav navbar-right">
                 <li class="username">
                     <a title="rutracker user"
-                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser()  ?>">
+                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser()   ?>">
                         <?= $rt->getUser()  ?></a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" method="get"
@@ -66,12 +65,25 @@ $flist = $rt->getFutureList();
                     <input type="text" class="form-control" placeholder="type here..."
                            name="search">
                 </div>
-                <button type="submit" class="btn btn-success btn-sm">Search</button>
+                <button type="submit" class="btn btn-success btn-sm">
+                    <span class="glyphicon glyphicon-search"></span>
+                    Search
+                </button>
             </form>
 
             <ul class="nav navbar-nav navbar-left">
-                <li class="username"><a href="#">Config</a></li>
-                <li class="username"><a href="#">About</a></li>
+                <li class="username">
+                    <a href="config.php">
+                        <span class="glyphicon glyphicon-cog"></span>
+                        Config
+                    </a>
+                </li>
+                <li class="username">
+                    <a href="about.php">
+                        <span class=" glyphicon glyphicon-info-sign"></span>
+                        About
+                    </a>
+                </li>
             </ul>
 
         </div>
