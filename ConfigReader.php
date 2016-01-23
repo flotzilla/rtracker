@@ -13,7 +13,7 @@ class ConfigReader
         $this->read_config();
     }
 
-    public function read_config(){
+    private function read_config(){
         $jsonIterator = new RecursiveIteratorIterator(
             new RecursiveArrayIterator(
                 json_decode(

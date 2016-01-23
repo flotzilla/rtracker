@@ -1,6 +1,5 @@
 <?php
 
-include "Utils.php";
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL ^ E_NOTICE);
@@ -122,6 +121,9 @@ class RutrackerAPI
             $dom->preserveWhiteSpace = false;
 
             $xpath = new DOMXpath($dom);
+            $this->isRutrackerOff($xpath);
+
+            //TODO read more params
 
             foreach ($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
                 $attr = $item->getAttribute('href');
@@ -237,7 +239,7 @@ class RutrackerAPI
                 ->firstChild->firstChild->attributes->getNamedItem('href')->textContent;
             $section_link_search = self::$main_page .$section_link_search . "&nm=" . $search_string;
             $section = $item->childNodes->item(4)->textContent;
-            $torrent_text = trim($item->childNodes->item(6)->childNodes->item(1)->textContent);
+            $torrent_text = trim(trim($item->childNodes->item(6)->textContent));
             $torrent_view_link = self::$main_page . $item->childNodes->item(6)
                     ->childNodes->item(1)->childNodes->item(1)->attributes->getNamedItem('href')->textContent;
             $author = self::$main_page . $item->childNodes->item(8)->childNodes->item(0)->childNodes->item(0)->attributes->getNamedItem('href')->textContent;
@@ -340,6 +342,10 @@ class RutrackerAPI
 
             $xpath = new DOMXpath($dom);
             $items = array();
+
+            $this->isRutrackerOff($xpath);
+
+            //TODO read more params
 
             $iterator = 0;
             foreach ($xpath->query('//a[@class="topictitle"]') as $item) {
