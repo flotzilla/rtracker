@@ -10,7 +10,7 @@ $rt->parse_user_params();
 $flist = $rt->getFutureList();
 
 ?>
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,9 +25,10 @@ $flist = $rt->getFutureList();
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="bower_components/css/style.css">
 
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/js/main.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/tablesorter/dist/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="bower_components/js/main.js"></script>
 
 </head>
 <body role="document">
@@ -49,15 +50,15 @@ $flist = $rt->getFutureList();
         <div id="navbar" class="navbar-collapse collapse">
             <a href="mylist.php">
                 <button class="btn btn-warning btn-sm navbar-btn navbar-left" type="button">
-                    My list <span class="badge"><?=$rt->getFutureListSize()?></span>
+                    My list <span class="badge"><?= $rt->getFutureListSize() ?></span>
                 </button>
             </a>
 
             <ul class="nav navbar-nav navbar-right">
                 <li class="username">
                     <a title="rutracker user"
-                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser()   ?>">
-                        <?= $rt->getUser()  ?></a></li>
+                       href="http://rutracker.org/forum/profile.php?mode=viewprofile&u=<?= $rt->getUser() ?>">
+                        <?= $rt->getUser() ?></a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" method="get"
                   action="index.php">
@@ -91,16 +92,35 @@ $flist = $rt->getFutureList();
     </div>
 </nav>
 <div class="container main-cont">
-    <div class="col-md-10">
-        <h3><span class="label label-default">From rutracker</span></h3>
-        <ul class="list-unstyled">
-            <?
-            foreach($flist as $p){
-                    echo "<li class=' '><a href='".$p['topic_link']. "'>". $p['topic_name']. "</a>"
-                    . " - <a href='".$p['link']. "'>". $p['name']. "</a></li>";
-            }
-            ?>
-        </ul>
+    <div class="col-md-12">
+        <h3 class="align-center"><span class="label label-default">From rutracker</span></h3>
+        <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
+               id="future_table">
+            <thead>
+            <tr class="th-middle">
+                <th class="align-center" data-sortable="true">#</th>
+                <th class="align-center" data-sortable="true">Topic</th>
+                <th class="align-center" data-sortable="true">Torrent</th>
+                <th class="align-center" data-sortable="true">Seeders</th>
+                <th class="align-center" data-sortable="true">Leechers</th>
+            </tr>
+            </thead>
+            <tbody>
+                <?
+                for ($i = 0; $i < count($flist); $i++) {
+                    echo "<tr>";
+                    echo '<td>' . ($i + 1 ) . '</td>';
+                    echo '<td><a href="' . $flist[$i]["topic_link"] . '">
+                       ' . $flist[$i]['topic_name'] . ' </a></td>';
+                    echo '<td><a href="' . $flist[$i]['link'] . '">
+                    ' . $flist[$i]['name'] . '</a></td>';
+                    echo '<td class="color-green">' . $flist[$i]['seeds'] . '</td>';
+                    echo '<td class="color-red">' . $flist[$i]['leeches'] . '</td>';
+                    echo "</tr>";
+                } ?>
+
+            </tbody>
+        </table>
     </div>
 </div>
 

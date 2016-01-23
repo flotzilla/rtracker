@@ -369,11 +369,15 @@ class RutrackerAPI
                 'topic_name' => $topic_name,
                 'topic_link' => $topic_link,
                 'seeds' => $seeds,
-                'leaches' => $leeches
+                'leeches' => $leeches
             ];
 
             $iterator++;
         }
+
+        usort($items, function($a, $b){
+           return strcmp($a['topic_name'], $b['topic_name']);
+        });
 
         $this->future_list = $items;
         return $items;
