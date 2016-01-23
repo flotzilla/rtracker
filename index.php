@@ -13,7 +13,10 @@ $config = $c->getConfig();
 $rt = new RutrackerAPI();
 $rt->init_action(
     $config['rutracker']['username'],
-    $config['rutracker']['password'])
+    $config['rutracker']['password']);
+$rt->parse_user_params();
+$flist = $rt->getFutureList();
+
 
 ?>
 <!DOCTYPE html>
@@ -104,7 +107,15 @@ if(isset($_GET['search'])){
                 <span class='glyphicon glyphicon-search'></span>
                 <span class='search-word'>" . $search_str . "</span>
             </h3>";
-    $rt->search($search_str);
+    $rt_result = $rt->search($search_str);
+
+    if(count($rt_result) !== 0){
+        echo count($rt_result). "<br>";
+        foreach ($rt_result as $t){
+            echo $t['torrent_text']. "<br>";
+        }
+    }
+
 }
 ?>
 </div>
