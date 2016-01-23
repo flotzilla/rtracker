@@ -109,28 +109,27 @@ class RutrackerAPI
         curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
         curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
 
-        $resp = curl_exec($curl);
-
+        if(!$resp = curl_exec($curl)){
+            echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
+            trigger_error(curl_error($curl));
+            exit;
+        }
         curl_close($curl);
 
-        if (!$resp) {
-            echo curl_error($curl);
-        } else {
-            $dom = new DOMDocument();
-            $dom->loadHTML($resp);
-            $dom->preserveWhiteSpace = false;
 
-            $xpath = new DOMXpath($dom);
-            $this->isRutrackerOff($xpath);
+        $dom = new DOMDocument();
+        $dom->loadHTML($resp);
+        $dom->preserveWhiteSpace = false;
 
-            //TODO read more params
+        $xpath = new DOMXpath($dom);
+        $this->isRutrackerOff($xpath);
 
-            foreach ($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
-                $attr = $item->getAttribute('href');
-                $this->user = $item->nodeValue;
-                $this->user_id = substr($attr, strpos($attr, "&u=") + 3);
-            }
+        //TODO read more params
 
+        foreach ($xpath->query('//a[@class="logged-in-as-uname"]') as $item) {
+            $attr = $item->getAttribute('href');
+            $this->user = $item->nodeValue;
+            $this->user_id = substr($attr, strpos($attr, "&u=") + 3);
         }
     }
 
@@ -186,6 +185,7 @@ class RutrackerAPI
         if(!$resp = curl_exec($curl)){
             echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
             trigger_error(curl_error($curl));
+            exit;
         }
         curl_close($curl);
 
@@ -210,7 +210,7 @@ class RutrackerAPI
                 return $search_result;
             }
         }else{
-           return $this->parse_search_result($resp, $search_string);
+            return $this->parse_search_result($resp, $search_string);
         }
 
         //if something bad happens
@@ -312,7 +312,6 @@ class RutrackerAPI
 
     private function get_future_page()
     {
-        $items = array();
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => self::$future_list_page . $this->user_id,
@@ -329,50 +328,55 @@ class RutrackerAPI
         curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
         curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
 
-        $resp = curl_exec($curl);
-
+        if(!$resp = curl_exec($curl)){
+            echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
+            trigger_error(curl_error($curl));
+            exit;
+        }
         curl_close($curl);
 
-        if (!$resp) {
-            return curl_error($curl);
-        } else {
-            $dom = new DOMDocument();
-            $dom->loadHTML($resp);
-            $dom->preserveWhiteSpace = false;
+        $dom = new DOMDocument();
+        $dom->loadHTML($resp);
+        $dom->preserveWhiteSpace = false;
 
-            $xpath = new DOMXpath($dom);
-            $items = array();
+        $xpath = new DOMXpath($dom);
+        $items = array();
 
-            $this->isRutrackerOff($xpath);
+        $this->isRutrackerOff($xpath);
 
-            //TODO read more params
+        $iterator = 0;
 
-            $iterator = 0;
-            foreach ($xpath->query('//a[@class="topictitle"]') as $item) {
-                $attr = self::$main_page . $item->getAttribute('href');
-                $text = trim(preg_replace("/[\r\n]+/", " ", $item->nodeValue));
-
-//                $seeds = trim(preg_replace("/[\r\n]+/", " ", $xpath->query('//span[@class="seedmed"]')
-//                    ->item($iterator)->nodeValue));
-
-                $topic = $xpath->query('//a[@class="gen f"]')->item($iterator);
-                $topic_name = $topic->nodeValue;
-                $topic_link = self::$main_page . $topic->getAttribute('href');
-
-                $items[$iterator] = [
-                    'link' => $attr,
-                    'name' => $text,
-                    'topic_name' => $topic_name,
-                    'topic_link' => $topic_link
-                ];
-
-                $iterator++;
+        foreach($xpath->query("//tr[@class='tCenter']") as $item){
+            $topic_link = self::$main_page . $item->childNodes->item(2)->childNodes->item(0)->attributes->getNamedItem('href')->textContent;
+            $topic_name = $item->childNodes->item(2)->textContent;
+            $torrent_name = trim($item->childNodes->item(4)->textContent);
+            $torrent_link = self::$main_page . $item->childNodes->item(4)->childNodes->item(1)->childNodes->item(1)->attributes->getNamedItem('href')->textContent;
+            if(strpos($torrent_link, '&view=newest#newest') !== false){
+                $torrent_link = substr($torrent_link, 0, strlen($torrent_link) - strlen('&view=newest#newest'));
             }
 
-            $this->future_list = $items;
-            return $items;
+            if(method_exists( $item->childNodes->item(6)->childNodes->item(1)->childNodes, 'item')){
+                $seeds = $item->childNodes->item(6)->childNodes->item(1)->childNodes->item(1)->childNodes->item(0)->childNodes->item(0)->textContent;
+                $leeches = $item->childNodes->item(6)->childNodes->item(1)->childNodes->item(1)->childNodes->item(2)->childNodes->item(0)->textContent;
+            }else{
+                $seeds = 'none';
+                $leeches = 'none';
+            }
+
+            $items[$iterator] = [
+                'link' => $torrent_link,
+                'name' => $torrent_name,
+                'topic_name' => $topic_name,
+                'topic_link' => $topic_link,
+                'seeds' => $seeds,
+                'leaches' => $leeches
+            ];
+
+            $iterator++;
         }
 
+        $this->future_list = $items;
+        return $items;
     }
 
     /**
