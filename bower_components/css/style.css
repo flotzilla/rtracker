@@ -28,3 +28,11 @@ body{
 .color-red{
     color: darkred;
 }
+
+#advanced_collapse{
+    margin-top: 15px;
+}
+
+.custom-butt{
+    margin-top: 10px;
+}

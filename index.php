@@ -100,6 +100,42 @@ $flist = $rt->getFutureList();
 
 <div class="container main-cont">
 
+    <div class="row col-md-6 col-md-offset-3">
+        <h4 class="align-center">Search</h4>
+        <form class="" role="search" method="get"
+              action="index.php">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="type here..."
+                       name="search">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-success">
+<!--                        <span class="glyphicon glyphicon-search"></span>-->
+                        Search
+                    </button>
+                </span>
+            </div>
+            <div>
+              <div class="row col-md-12 align-center">
+                  <button class="btn btn-default btn-sm custom-butt" type="button" data-toggle="collapse"
+                          data-target="#advanced_collapse" aria-expanded="false" aria-controls="advanced_collapse">
+                      Advanced params
+                  </button>
+              </div>
+                <div class="collapse col-md-12" id="advanced_collapse">
+                    <div class="well">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="author_name">author</span>
+                            <input type="text" class="form-control" placeholder="search by author name"
+                                   name="pn" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row col-md-12">
 <?
 if(isset($_GET['search'])){
     $search_str = trim($_GET['search']);
@@ -122,7 +158,9 @@ if(isset($_GET['search'])){
 
 }
 ?>
-</div>
+    </div>
+
+</div> <!--//end of .container .main-cont-->
 
 </body>
 </html>

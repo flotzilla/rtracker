@@ -4,7 +4,6 @@
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL ^ E_NOTICE);
 
-
 class RutrackerAPI
 {
     private static $login_page = 'http://login.rutracker.org/forum/login.php';
@@ -135,6 +134,8 @@ class RutrackerAPI
 
     public function search($search_string, $options=array()){
 
+        $search_string = trim($search_string);;
+
         //post type for first search, get type for subsequent
         $curl = curl_init();
         if(self::$is_search_first_run){
@@ -189,7 +190,6 @@ class RutrackerAPI
         }
         curl_close($curl);
 
-
         if(self::$is_search_first_run){
             $search_result =  $this->parse_search_result($resp, $search_string);
             if(isset($search_result['pages']) && isset ($search_result['search_id'])){
@@ -208,13 +208,12 @@ class RutrackerAPI
                 }
                 self::$is_search_first_run = true;
                 return $search_result;
+            }else{
+                return $search_result;
             }
         }else{
             return $this->parse_search_result($resp, $search_string);
         }
-
-        //if something bad happens
-        return array();
     }
 
     private function parse_search_result($html, $search_string){
