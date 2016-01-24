@@ -132,8 +132,16 @@ class RutrackerAPI
         }
     }
 
+    /**
+     * Search method
+     * @param $search_string
+     * @param array $options
+     * * ! `pn` search post parameter must be in cp1251 encoding
+     * @return array with founded items or array with error
+     */
     public function search($search_string, $options=array()){
 
+        $errors = array();
         $search_string = trim($search_string);;
 
         //post type for first search, get type for subsequent
@@ -150,7 +158,7 @@ class RutrackerAPI
                 CURLOPT_CONNECTTIMEOUT => 120,
                 CURLOPT_TIMEOUT => 120,
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_ENCODING => 'en-US,en;q=0.7,ru;q=0.3',
+                CURLOPT_ENCODING => 'gzip,deflate',
                 CURLOPT_COOKIESESSION, 1,
             ));
         }else{
@@ -165,7 +173,7 @@ class RutrackerAPI
                 CURLOPT_TIMEOUT => 120,
                 CURLOPT_HEADER => false,
                 CURLOPT_MAXREDIRS => 10,
-                CURLOPT_ENCODING => 'en-US,en;q=0.7,ru;q=0.3',
+                CURLOPT_ENCODING => 'gzip,deflate',
             ));
         }
 
@@ -184,9 +192,8 @@ class RutrackerAPI
         }
 
         if(!$resp = curl_exec($curl)){
-            echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
             trigger_error(curl_error($curl));
-            exit;
+            return $errors['error'] = "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
         }
         curl_close($curl);
 
@@ -228,6 +235,14 @@ class RutrackerAPI
 
         $torrents = array();
         $iterator = 0;
+
+        $error = $xpath->query("//*[@class='row1 tCenter pad_12']");
+        if(trim($error->item(0)->nodeValue) == 'Не найдено'){
+            return array(
+                'error' => "Nothing was found"
+            );
+        }
+
         foreach ($xpath->query("//tr[@class='tCenter hl-tr']") as $item) {
 
             $status = $item->childNodes->item(2)->attributes->getNamedItem('title')->textContent;
@@ -236,6 +251,7 @@ class RutrackerAPI
 
             $section_link_search = $item->childNodes->item(4)
                 ->firstChild->firstChild->attributes->getNamedItem('href')->textContent;
+            $section_link_search = substr($section_link_search, 12);
             $section = $item->childNodes->item(4)->textContent;
             $torrent_text = trim(trim($item->childNodes->item(6)->textContent));
             $torrent_view_link = self::$main_page . $item->childNodes->item(6)

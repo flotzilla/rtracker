@@ -1,5 +1,5 @@
 
 $(document).ready(function(){
-        $("#future_table").tablesorter();
-        $("#rutracker_result").tablesorter();
+    $("#future_table").tablesorter();
+    $("#rutracker_result").tablesorter();
 });

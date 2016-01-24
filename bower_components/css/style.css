@@ -56,3 +56,19 @@ body{
 .font12{
     font-size: 12px;
 }
+
+#group-select{
+    width: 470px;
+    height: 200px;
+    max-width: 470px;
+}
+
+.rutracker-label{
+    border-bottom: 1px solid #2CA0DD;
+    margin-bottom: 10px;
+}
+
+.single-line{
+    white-space: nowrap;
+    word-break: keep-all;
+}
