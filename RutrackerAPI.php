@@ -236,13 +236,13 @@ class RutrackerAPI
 
             $section_link_search = $item->childNodes->item(4)
                 ->firstChild->firstChild->attributes->getNamedItem('href')->textContent;
-            $section_link_search = self::$main_page .$section_link_search . "&nm=" . $search_string;
             $section = $item->childNodes->item(4)->textContent;
             $torrent_text = trim(trim($item->childNodes->item(6)->textContent));
             $torrent_view_link = self::$main_page . $item->childNodes->item(6)
                     ->childNodes->item(1)->childNodes->item(1)->attributes->getNamedItem('href')->textContent;
-            $author = self::$main_page . $item->childNodes->item(8)->childNodes->item(0)->childNodes->item(0)->attributes->getNamedItem('href')->textContent;
-            $author_link = $item->childNodes->item(8)->textContent;
+            $author_link = $item->childNodes->item(8)->childNodes->item(0)->childNodes->item(0)->attributes->getNamedItem('href')->textContent;
+            $author_link = substr($author_link, 16);
+            $author = $item->childNodes->item(8)->textContent;
 
             $size = $item->childNodes->item(10)->childNodes->item(3)->textContent;
             $size = substr($size, 0 , strlen($size)-4);
@@ -254,7 +254,10 @@ class RutrackerAPI
             }
 
             $seeds= $item->childNodes->item(12)->childNodes->item(0)->textContent;
-            $leaches= $item->childNodes->item(14)->textContent;
+            if(strpos($seeds, "-") !== false){
+                $seeds = substr($seeds, 1, strlen($seeds)) . " days";
+            }
+            $leeches= $item->childNodes->item(14)->textContent;
             $downloads_count= $item->childNodes->item(16)->textContent;
             $added= $item->childNodes->item(18)->childNodes->item(3)->textContent
                 . " " . $item->childNodes->item(18)->childNodes->item(5)->nodeValue;
@@ -270,7 +273,7 @@ class RutrackerAPI
                 'size' => $size,
                 'torrent_link' => $torrent_link,
                 'seeds' => $seeds,
-                'leaches' => $leaches,
+                'leeches' => $leeches,
                 'downloads_count' => $downloads_count,
                 'added' => $added
             );
@@ -431,4 +434,30 @@ class RutrackerAPI
     public function getFutureListSize(){
         return count($this->future_list);
     }
+
+    /**
+     * @return string
+     */
+    public static function getProfilePage()
+    {
+        return self::$profile_page;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getFutureListPage()
+    {
+        return self::$future_list_page;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getMainPage()
+    {
+        return self::$main_page;
+    }
+
+
 }

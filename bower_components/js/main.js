@@ -1,5 +1,5 @@
 
 $(document).ready(function(){
-        console.log('ss');
         $("#future_table").tablesorter();
+        $("#rutracker_result").tablesorter();
 });
