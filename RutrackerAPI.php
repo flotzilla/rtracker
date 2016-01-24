@@ -271,7 +271,7 @@ class RutrackerAPI
 
             $seeds= $item->childNodes->item(12)->childNodes->item(0)->textContent;
             if(strpos($seeds, "-") !== false){
-                $seeds = substr($seeds, 1, strlen($seeds)) . " days";
+                $seeds = $seeds. " days";
             }
             $leeches= $item->childNodes->item(14)->textContent;
             $downloads_count= $item->childNodes->item(16)->textContent;

@@ -31,11 +31,13 @@ $flist = $rt->getFutureList();
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bower_components/tablesorter/dist/css/theme.metro-dark.min.css">
     <link rel="stylesheet" href="bower_components/css/style.css">
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/tablesorter/dist/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="bower_components/tablesorter/dist/js/parsers/parser-metric.min.js"></script>
     <script type="text/javascript" src="bower_components/js/main.js"></script>
 
 
@@ -1591,7 +1593,7 @@ if(isset($_GET['search'])){
                 </th><!--6-->
                 <th class="align-center color-red" data-sortable="true">
                     <span class="glyphicon glyphicon-arrow-down"></span>
-                </th><!--7-->
+                    </th><!--7-->
                 <th class="align-center" data-sortable="true">Down.</th><!--8-->
                 <th class="align-center" data-sortable="true">Added</th><!--9-->
             </tr>
@@ -1621,7 +1623,8 @@ if(isset($_GET['search'])){
                 </td>';
                 echo '<td class="font12"><a href="' . $rt->getProfilePage() . $rt_result[$i]['author_link'] . '">
                     ' . $rt_result[$i]['author'] . '</a></td>';
-                echo '<td class="align-center">' . $rt_result[$i]['size'] . '</td>';
+                echo '<td class="align-center sorter-metric" data-metric-name-full="byte|Byte|BYTE"
+                    data-metric-name-abbr="b|B">' . $rt_result[$i]['size'] . '</td>';
 
                 if(strpos($rt_result[$i]['seeds'], 'days') !== false){
                     echo '<td class="col-gray align-center">' . $rt_result[$i]['seeds'] . '</td>';
