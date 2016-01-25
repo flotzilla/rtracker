@@ -5,11 +5,15 @@ p2p torrent tracker searcher
 ----
 
 Search torrents from multiple trackers.
-Runs on your local php server
+Separate API for each tracker and web page to combine results
+Runs on your local server with php module
 
 Search in:
 
-* rutracker.org
+* rutracker.org (already done)
+* rutor (planned)
+* ex.ua (planned)
+* piratebay (planned)
 
 
 ##Preparation
@@ -22,7 +26,7 @@ Run before first launch:
 * `bower install git https://github.com/christianbach/tablesorter`
 * `bower install bootstrap`  
 
-fill config.json file with your rutracker.org params
+Fill config.json file with your rutracker.org params
 `
 {  
   "rutracker": {
