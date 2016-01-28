@@ -8,7 +8,7 @@ class ConfigReader
 
     function __construct()
     {
-        self::$default_conf_file = getcwd() . '/config.json';
+        self::$default_conf_file = getcwd() . '/config/config.json';
         $this->config= array();
         $this->read_config();
     }

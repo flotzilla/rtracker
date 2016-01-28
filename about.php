@@ -1,5 +1,5 @@
 <?php
-include "RutrackerAPI.php";
+include "classes/API/RutrackerAPI.php";
 include "ConfigReader.php";
 
 $c = new ConfigReader();

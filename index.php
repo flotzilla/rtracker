@@ -1,8 +1,8 @@
 <?php
 
-include_once "RutrackerAPI.php";
+include_once "classes/API/RutrackerAPI.php";
 include "ConfigReader.php";
-include "Utils.php";
+include "classes/Utils.php";
 
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
