@@ -98,12 +98,7 @@ $flist = $rt->getFutureList();
         $file = $rt->read_from_file();
         if(array_key_exists('error', $file)) {
             echo "<h4>" . $file['error'] . "</h4>";
-        } else {
-            foreach ($file as $error) {
-                Utils::preOut($error);
-            }
         }
-
 
 //        $save_er = $rt->save_future_list($flist);
 //        if(count($save_er) > 0){
