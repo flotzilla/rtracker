@@ -1,8 +1,11 @@
 <?php
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL ^ E_NOTICE);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ERROR );
+//error_reporting(E_ALL );
+
+include getcwd() . '/classes/Utils.php';
 
 class RutrackerAPI
 {
@@ -10,6 +13,7 @@ class RutrackerAPI
     private static $future_list_page = 'http://rutracker.org/forum/search.php?dlw=1&dlu=';
     private static $profile_page = 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=';
     private static $main_page = 'http://rutracker.org/forum/';
+    private static $future_list_file = '/tmp/rutracker_future_list.txt';
     //save cookies in tempo directory
     private static $cookies;
     private static $user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0';
@@ -130,6 +134,77 @@ class RutrackerAPI
             $this->user = $item->nodeValue;
             $this->user_id = substr($attr, strpos($attr, "&u=") + 3);
         }
+    }
+
+    public function save_future_list($list){
+        $file = getcwd() . self::$future_list_file;
+        $data_to_write = '';
+        $errors = array();
+
+        if (!file_exists($file)) {
+            $f = fopen($file, 'w');
+            if($f === false){
+                $errors['error'] = "Cannot crete future list file <code>" . $file . "</code>";
+            }else{
+                fclose($f);
+            }
+        }
+
+        foreach($list as $el){
+            $data_to_write .= $el['name'] . " ::: " .$el['link'] . "\n";
+        }
+
+        if(is_writable($file)){
+            if(file_put_contents($file, $data_to_write, FILE_APPEND) == false){
+                $errors['error'] = 'cannot write to file <code>' . $file . "</code>";
+            }
+        }else{
+            $errors['error'] = 'file is not writable <code>' . $file . "</code>";
+        }
+
+        return $errors;
+    }
+
+    public function compare_file_to_tracker_future_list($arr_from_file, &$arr_from_tracker){
+
+    }
+    public function read_from_file(){
+        $file = getcwd() . self::$future_list_file;
+        $array_items = array();
+        $errors = array();
+
+        if(file_exists($file)){
+            if(!is_readable($file)){
+                $errors['error'] = "Rutracker future list file is not readable <code>" . $file . "</code>";
+            }else{
+                if(filesize($file) > 0){
+                    $file_content = file_get_contents($file, true);
+                    if($file_content === false){
+                        return $errors['error'] = 'Cannot read form Rutracker future list file <code>' . $file . "</code>";
+                    }
+
+                    $items = explode("\n", $file_content);
+                    for($i = 0; $i < count($items)-1; $i++){
+                        $ar = explode(':::', $items[$i]);
+                        $array_items[] = array(
+                            'name' => $ar[0],
+                            'link' => $ar[1]
+                        );
+                    }
+                }else{
+                    $errors['error'] = "Rutracker future list file is empty <code>" . $file . "</code>";
+                }
+            }
+        }else{
+            $errors['error'] = 'Rutracker future list file does not exists';
+        }
+
+        if(count($errors) > 0){
+            return $errors;
+        }else{
+            return $array_items;
+        }
+
     }
 
     /**
@@ -367,7 +442,10 @@ class RutrackerAPI
         foreach($xpath->query("//tr[@class='tCenter']") as $item){
             $topic_link = self::$main_page . $item->childNodes->item(2)->childNodes->item(0)->attributes->getNamedItem('href')->textContent;
             $topic_name = $item->childNodes->item(2)->textContent;
-            $torrent_name = trim($item->childNodes->item(4)->textContent);
+            $torrent_name = trim($item->childNodes->item(4)->childNodes->item(1)->childNodes->item(1)->nodeValue);
+            if($torrent_name === ""){
+                $torrent_name = $item->childNodes->item(4)->childNodes->item(1)->childNodes->item(3)->nodeValue;
+            }
             $torrent_link = self::$main_page . $item->childNodes->item(4)->childNodes->item(1)->childNodes->item(1)->attributes->getNamedItem('href')->textContent;
             if(strpos($torrent_link, '&view=newest#newest') !== false){
                 $torrent_link = substr($torrent_link, 0, strlen($torrent_link) - strlen('&view=newest#newest'));

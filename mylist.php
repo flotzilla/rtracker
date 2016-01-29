@@ -94,6 +94,31 @@ $flist = $rt->getFutureList();
 </nav>
 <div class="container main-cont">
     <div class="col-md-12">
+        <?
+        $file = $rt->read_from_file();
+        if(array_key_exists('error', $file)) {
+            echo "<h4>" . $file['error'] . "</h4>";
+        } else {
+            foreach ($file as $error) {
+                Utils::preOut($error);
+            }
+        }
+
+
+//        $save_er = $rt->save_future_list($flist);
+//        if(count($save_er) > 0){
+//            $errors = '';
+//            foreach($save_er as $err){
+//                $errors .=  "<h4>" . $err . "</h4><br>";
+//            }
+//        }else{
+//            echo "<h4>Succesfully saved</h4>";
+//        }
+
+
+
+        ?>
+
         <h3 class="align-center"><span class="label label-default">From rutracker</span></h3>
         <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
                id="future_table">
