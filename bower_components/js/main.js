@@ -5,4 +5,9 @@ $(document).ready(function(){
         theme : 'metro-dark',
         widgets : ["zebra"]
     });
+
+    $("#rutor_result").tablesorter({
+        theme : 'metro-dark',
+        widgets : ["zebra"]
+    });
 });

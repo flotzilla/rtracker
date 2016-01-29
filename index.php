@@ -1,6 +1,7 @@
 <?php
 
 include_once "classes/API/RutrackerAPI.php";
+include_once "classes/API/RutorAPI.php";
 include "ConfigReader.php";
 include "classes/Utils.php";
 
@@ -18,6 +19,7 @@ $rt->init_action(
 $rt->parse_user_params();
 $flist = $rt->getFutureList();
 
+$rutor = new RutorAPI();
 
 ?>
 <!DOCTYPE html>
@@ -1539,7 +1541,7 @@ $flist = $rt->getFutureList();
 <?
 if(isset($_GET['search'])){
     $search_str = trim($_GET['search']);
-    $rt_result = array();
+    $rt_result = $rutor_search = array();
     if(strlen($search_str) == 0){
         echo '<div class="alert alert-danger" role="alert"><p>To short query</p></div>';
     }else{
@@ -1573,10 +1575,12 @@ if(isset($_GET['search'])){
         );
 
         $rt_result = $rt->search($search_str, $options);
+        $rutor_search= $rutor->search($search_str);
+
     }
 
     if(count($rt_result) !== 0 && !array_key_exists('error', $rt_result)){
-        echo "<p> <span class='search-word'>Rutracker</span> Found: ". (count($rt_result) -2) . " results</p><br>";
+        echo "<p> <span class='search-word'>Rutracker</span> Found: ". (count($rt_result) -2) . " results</p>";
 
         ?>
         <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
@@ -1587,7 +1591,8 @@ if(isset($_GET['search'])){
                 <th class="align-center" data-sortable="true">Topic</th> <!--2-->
                 <th class="align-center" data-sortable="true">Torrent</th><!--3-->
                 <th class="align-center" data-sortable="true">Author</th><!--4-->
-                <th class="align-center" data-sortable="true">Size</th><!--5-->
+                <th class="align-center sorter-metric" data-metric-name-full="byte|Byte|BYTE"
+                    data-metric-name-abbr="b|B" data-sortable="true">Size</th><!--5-->
                 <th class="align-center color-green" data-sortable="true">
                     <span class="glyphicon glyphicon-arrow-up"></span>
                 </th><!--6-->
@@ -1637,13 +1642,62 @@ if(isset($_GET['search'])){
                 echo "</tr>";
             } ?>
             </tbody>
-        </table>
+        </table> <br><br>
         <?
     }else{
         echo "<p> <span class='search-word'>Rutracker</span> Nothing found</p><br>";
     }
 
+    if(count($rutor_search) !== 0 && !array_key_exists('error', $rutor_search)){
+        echo "<p> <span class='search-word'>Rutor</span> Found: ". (count($rutor_search) -2) . " results</p>";
+        ?>
+        <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
+               id="rutor_result">
+            <thead>
+            <tr class="th-middle">
+                <th class="align-center" data-sortable="true">Added</th><!--9-->
+                <th class="align-center" data-sortable="true">Torrent</th><!--3-->
+                <th class="align-center sorter-metric" data-metric-name-full="byte|Byte|BYTE"
+                    data-metric-name-abbr="b|B" data-sortable="true">Size</th><!--5-->
+                <th class="align-center color-green" data-sortable="true">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                </th><!--6-->
+                <th class="align-center color-red" data-sortable="true">
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                </th><!--7-->
+                <th class="align-center">Link</th><!--9-->
+            </tr>
+            </thead>
+            <tbody>
+            <?
+                for($i=0 ; $i<count($rutor_search); $i++){
+                    if(!isset($rutor_search[$i]['torrent_text'])){
+                        continue;
+                    }
+                    echo "<tr>";
+                    echo "<td class='align-center'>" . $rutor_search[$i]['added']."</td>";
+                    echo "<td><a href='" .$rutor_search[$i]['torrent_view_link'] . "'>".
+                        $rutor_search[$i]['torrent_text']."</a></td>";
+                    echo "<td class='align-center'>" . $rutor_search[$i]['size']."</td>";
+                    echo "<td class='align-center color-green'>" . $rutor_search[$i]['seeders']."</td>";
+                    echo "<td class='align-center color-red'>" . $rutor_search[$i]['leeches']."</td>";
+                    echo "<td class='align-center'><a title='Download torrent'
+                    href='" . $rutor_search[$i]['torrent_link']."'>
+                      <span class='glyphicon glyphicon-arrow-down cursor-pointer'></span>
+                    </a></td>";
+                    echo "</tr>";
+                }
+            ?>
+            </tbody>
+            </table><br><br>
+
+<?
+    }else{
+        echo "<p> <span class='search-word'>Rutor</span> Nothing found</p><br>";
+    }
+
 }
+
 ?>
     </div>
 

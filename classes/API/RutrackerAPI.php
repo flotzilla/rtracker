@@ -11,7 +11,7 @@ class RutrackerAPI
     private static $profile_page = 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=';
     private static $main_page = 'http://rutracker.org/forum/';
     //save cookies in tempo directory
-    private static $coockies;
+    private static $cookies;
     private static $user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0';
 
     //for recursive handling search queries
@@ -23,7 +23,7 @@ class RutrackerAPI
 
     function __construct()
     {
-        self::$coockies = getcwd() . '/tmp/rt_cookie.txt';
+        self::$cookies = getcwd() . '/tmp/rt_cookie.txt';
     }
 
     public function init_action($user, $password){
@@ -42,11 +42,11 @@ class RutrackerAPI
     {
         $is_success = false;
 
-        if (!file_exists(self::$coockies)) {
+        if (!file_exists(self::$cookies)) {
             echo 'Cookie file missing.';
             return $is_success;
         } else {
-            if (!is_writable(self::$coockies)) {
+            if (!is_writable(self::$cookies)) {
                 echo "cannot write to file";
                 return $is_success;
             }
@@ -75,8 +75,8 @@ class RutrackerAPI
         ));
 
         //cannot set this params in `curl_setopt_array`
-        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
-        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
+        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$cookies));
+        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$cookies));
 
         $resp = curl_exec($curl);
         if (!$resp) {
@@ -105,8 +105,8 @@ class RutrackerAPI
             CURLOPT_ENCODING => 'en-US,en;q=0.7,ru;q=0.3',
         ));
 
-        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
-        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
+        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$cookies));
+        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$cookies));
 
         if(!$resp = curl_exec($curl)){
             echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";
@@ -177,8 +177,8 @@ class RutrackerAPI
             ));
         }
 
-        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
-        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
+        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$cookies));
+        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$cookies));
 
         //if exist any search options
         if(empty($options)){
@@ -343,8 +343,8 @@ class RutrackerAPI
             CURLOPT_ENCODING => 'en-US,en;q=0.7,ru;q=0.3',
         ));
 
-        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$coockies));
-        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$coockies));
+        curl_setopt($curl, CURLOPT_COOKIEJAR, realpath(self::$cookies));
+        curl_setopt($curl, CURLOPT_COOKIEFILE, realpath(self::$cookies));
 
         if(!$resp = curl_exec($curl)){
             echo "<br> <h2 class='align-center'>Неправильный запрос</h2> <br>";

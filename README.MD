@@ -11,14 +11,14 @@ Runs on your local server with php module
 Search in:
 
 * rutracker.org (already done)
-* rutor (planned)
+* rutor (already done)
 * ex.ua (planned)
 * piratebay (planned)
 
 
 ##Preparation
 
-File `/tmp/rt_cookie.txt` must be writable
+File `/tmp/rt_cookie.txt` and `/tmp/rutor_cookie`must be writable
 
 Run before first launch:
 
