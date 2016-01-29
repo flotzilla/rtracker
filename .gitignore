@@ -1,5 +1,6 @@
-#/config/config.json
+/config/config.json
 /bower_components/bootstrap/**
 /bower_components/jquery/**
 /tmp/rt_cookie.txt
+/tmp/rutor_cookie.txt
 /.idea/**

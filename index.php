@@ -26,7 +26,13 @@ $rutor = new RutorAPI();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rtracker management</title>
+    <title>Rtracker search
+        <?
+            if(isset($_GET['search'])) {
+                echo " - " . trim($_GET['search']);
+            }
+        ?>
+    </title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

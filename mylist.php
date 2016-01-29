@@ -23,6 +23,7 @@ $flist = $rt->getFutureList();
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="bower_components/tablesorter/dist/css/theme.metro-dark.min.css">
     <link rel="stylesheet" href="bower_components/css/style.css">
 
     <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
