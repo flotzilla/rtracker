@@ -1,13 +1,14 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 include_once "classes/API/RutrackerAPI.php";
 include_once "classes/API/RutorAPI.php";
 include "ConfigReader.php";
-include "classes/Utils.php";
+include_once "classes/Utils.php";
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
 
 $c = new ConfigReader();
 $config = $c->getConfig();
@@ -1586,7 +1587,11 @@ if(isset($_GET['search'])){
     }
 
     if(count($rt_result) !== 0 && !array_key_exists('error', $rt_result)){
-        echo "<p> <span class='search-word'>Rutracker</span> Found: ". (count($rt_result) -2) . " results</p>";
+        if(array_key_exists('pages', $rt_result) && array_key_exists('search_id', $rt_result)){
+            echo "<p> <span class='search-word'>Rutracker</span> Found: ". (count($rt_result) -2) . " results</p>";
+        }else{
+            echo "<p> <span class='search-word'>Rutracker</span> Found: ". (count($rt_result)) . " results</p>";
+        }
 
         ?>
         <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"

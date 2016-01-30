@@ -1,6 +1,6 @@
 <?php
 
-include "../Utils.php";
+include_once getcwd() . '/classes/Utils.php';
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL ^ E_NOTICE);
@@ -85,6 +85,10 @@ class RutorAPI
 
         $xpath = new DOMXPath($dom);
         $parsed = $xpath->query("//div[@id='index']");
+
+        if($parsed->length == 0){
+            return array();
+        }
 
         $found = trim($parsed->item(0)->childNodes->item(2)->textContent);
         $found = (int) substr($found, 36, strlen($found) - 48);
