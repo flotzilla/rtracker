@@ -38,6 +38,10 @@ body{
     color: #45484d;
 }
 
+.col-more-gray{
+    color: #5b5e63;
+}
+
 #advanced_collapse{
     margin-top: 15px;
 }
@@ -75,5 +79,11 @@ body{
 }
 
 .button-div{
-    padding: 10px;
+    padding: 0 10px;
+}
+
+.button-div > label{
+    color: #4b5566;
+    text-shadow: 1px 1px 1px #ccc;
+
 }

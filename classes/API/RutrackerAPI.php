@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ERROR );
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ERROR );
 //error_reporting(E_ALL );
 
 include getcwd() . '/classes/Utils.php';
@@ -165,8 +165,38 @@ class RutrackerAPI
         return $errors;
     }
 
-    public function compare_file_to_tracker_future_list($arr_from_file, &$arr_from_tracker){
 
+    /**
+     * Compare items from local file with items, received from tracker. If item was found in tracker list,
+     * than will mark tracker item as old (type = 'old').
+     * @param $arr_from_file - array of items, loaded from local file
+     * @param $arr_from_tracker - array with items, received from tracker
+     * @return array with items, that found in local file, but not found in tracker list
+     */
+    public function compare_file_to_tracker_future_list($arr_from_file, &$arr_from_tracker){
+        $new_items = array();
+        foreach($arr_from_file as $aff){
+            $found = false;
+            for($i = 0; $i < count($arr_from_tracker); $i++){
+                if($aff['link'] == $arr_from_tracker[$i]['link']){
+                    $arr_from_tracker[$i]['type'] = 'old';
+                    $found = true;
+                    break;
+                }
+            }
+
+            foreach($arr_from_tracker as &$arft){
+                if(!array_key_exists('type', $arft)){
+                    $arft['type'] = 'new';
+                }
+            }
+
+            if(!$found){
+                $new_items[] = $aff;
+            }
+        }
+
+        return $new_items;
     }
     public function read_from_file(){
         $file = getcwd() . self::$future_list_file;
@@ -188,7 +218,7 @@ class RutrackerAPI
                         $ar = explode(':::', $items[$i]);
                         $array_items[] = array(
                             'name' => $ar[0],
-                            'link' => $ar[1]
+                            'link' => trim($ar[1])
                         );
                     }
                 }else{
