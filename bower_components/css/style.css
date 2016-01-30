@@ -73,3 +73,7 @@ body{
     white-space: nowrap;
     word-break: keep-all;
 }
+
+.button-div{
+    padding: 10px;
+}

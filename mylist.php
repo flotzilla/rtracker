@@ -8,6 +8,7 @@ $config = $c->getConfig();
 $rt = new RutrackerAPI();
 $rt->parse_user_params();
 $flist = $rt->getFutureList();
+$file = $rt->read_from_file();
 
 ?>
 
@@ -93,12 +94,35 @@ $flist = $rt->getFutureList();
     </div>
 </nav>
 <div class="container main-cont">
+    <div class="row">
+        <div class="col-md-2 align-center">
+            <h4>
+                <span class="label label-default">Rutracker list</span>
+            </h4>
+        </div>
+        <div class="col-md-6">
+            <?if(array_key_exists('error', $file)) {
+                echo '<div class="alert alert-info" role="alert">' . $file['error'] . "</div>";
+            }?>
+        </div>
+        <div class="col-md-2 button-div align-center">
+            <label for="save-btn">Save list to file</label>
+            <button type="button" id="save-btn" class="btn btn-default" value="Save to file">
+                <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                Save
+            </button>
+        </div>
+        <div class="col-md-2 button-div align-center">
+            <label for="load-btn">Load list from file</label>
+            <button type="button" id="load-btn" class="btn btn-default" value="Save to file">
+                <span class="glyphicon glyphicon-circle-arrow-up"></span>
+                Load
+            </button>
+        </div>
+    </div>
     <div class="col-md-12">
         <?
-        $file = $rt->read_from_file();
-        if(array_key_exists('error', $file)) {
-            echo "<h4>" . $file['error'] . "</h4>";
-        }
+
 
 //        $save_er = $rt->save_future_list($flist);
 //        if(count($save_er) > 0){
@@ -114,7 +138,6 @@ $flist = $rt->getFutureList();
 
         ?>
 
-        <h3 class="align-center"><span class="label label-default">From rutracker</span></h3>
         <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
                id="future_table">
             <thead>
@@ -143,8 +166,8 @@ $flist = $rt->getFutureList();
             </tbody>
         </table>
     </div>
-</div>
 
+</div>
 
 </body>
 </html>
