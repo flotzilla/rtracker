@@ -45,9 +45,12 @@ function send_new_items(){
         }
     });
 
-    items = JSON.stringify(items);
-    console.log(items);
+    if(items.length == 0){
+        $('#info-block').text("Nothing to save");
+        return;
+    }
 
+    items = JSON.stringify(items);
     var req = $.ajax({
         url: "classes/xmlhttpreq/list_action.php",
         type: 'json',
@@ -57,11 +60,42 @@ function send_new_items(){
             data: items
         },
         success: function(){
-            console.log(req.responseText);
+            var resp = JSON.parse(req.responseText);
+            post_save_list_action(resp);
         },
         error: function(){
             console.log(this);
         }
     });
 
+}
+
+function post_save_list_action(resp){
+    if(resp != false){
+        if(resp.status && resp.status == "saved"){
+            $('#info-block').text("Saved to file");
+            $('#new_items_counter').attr('data-count', 0);
+
+            $('.items_counter').each(function(){
+                $(this).remove();
+            });
+
+            $('tr').each(function () {
+                if ($(this).attr('data-item-type') == 'new') {
+                    $(this).attr('data-item-type', 'old');
+                    var span = $(this).find("span.glyphicon-flash");
+
+                    span.removeClass('glyphicon-flash');
+                    span.removeClass('color-green');
+                    span.addClass('color-orange glyphicon-asterisk');
+
+                    $('#save-btn').attr('disabled', 'disabled');
+
+                }
+            });
+
+        }else if(resp.error){
+            $('#info-block').text(resp.error);
+        }
+    }
 }

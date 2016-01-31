@@ -62,8 +62,8 @@ $new_items_counter = 0;
 
         <div id="navbar" class="navbar-collapse collapse">
             <a href="mylist.php">
-                <button class="btn btn-warning btn-sm navbar-btn navbar-left items_counter" type="button">
-                    My list
+                <button class="btn btn-warning btn-sm navbar-btn navbar-left" type="button">
+                    My list <span class="items_counter"></span>
                 </button>
             </a>
 
@@ -112,50 +112,28 @@ $new_items_counter = 0;
             </h4>
         </div>
         <div class="col-md-6">
-            <?if(count($file) > 1 && array_key_exists('error', $file)) {
-                echo '<div class="alert alert-info" role="alert">' . $file['error'] . "</div>";
-            }else{
-                echo '<div class="alert alert-info" role="alert">Successfully read from file</div>';
-                $items_from_file = $rt->compare_file_to_tracker_future_list($file, $flist);
-            }
-            ?>
+            <div id="info-block" class="alert alert-info" role="alert">
+                <?if(count($file) > 1 && array_key_exists('error', $file)) {
+                    echo  $file['error'];
+                }else{
+                    echo 'Successfully read from file';
+                    $items_from_file = $rt->compare_file_to_tracker_future_list($file, $flist);
+                }
+                ?>
+                </div>
         </div>
-        <div class="col-md-2 button-div align-center">
+        <div class="col-md-2 col-md-offset-1 button-div align-center">
             <label for="save-btn">
                 Save new items to file
                 <span class="items_counter"></span>
             </label>
             <button type="button" id="save-btn" class="btn btn-default" value="Save to file">
-                <span class="glyphicon glyphicon glyphicon-floppy-save"></span>
+                <span class="glyphicon glyphicon glyphicon-floppy-save color-green"></span>
                 Save
-            </button>
-        </div>
-        <div class="col-md-2 button-div align-center">
-            <label for="load-btn">Load list from file</label>
-            <button type="button" id="load-btn" class="btn btn-default" value="Save to file">
-                <span class="glyphicon glyphicon glyphicon-floppy-open"></span>
-                Load
             </button>
         </div>
     </div>
     <div class="col-md-12">
-        <?
-
-
-//        $save_er = $rt->save_future_list($flist);
-//        if(count($save_er) > 0){
-//            $errors = '';
-//            foreach($save_er as $err){
-//                $errors .=  "<h4>" . $err . "</h4><br>";
-//            }
-//        }else{
-//            echo "<h4>Succesfully saved</h4>";
-//        }
-
-
-
-        ?>
-
         <table class="table table-striped table-hover table-bordered  table-condensed tablesorter"
                id="future_table">
             <thead>

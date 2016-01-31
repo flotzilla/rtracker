@@ -85,7 +85,10 @@ body{
 .button-div > label{
     color: #4b5566;
     text-shadow: 1px 1px 1px #ccc;
+}
 
+#save-btn{
+    box-shadow: 2px 2px 2px 2px #c8c8c8;
 }
 
 #new_items_counter{
