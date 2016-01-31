@@ -1,6 +1,11 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL );
+
 include_once "classes/API/RutrackerAPI.php";
 include "ConfigReader.php";
+include_once "classes/Utils.php";
 
 $c = new ConfigReader();
 $config = $c->getConfig();
@@ -10,9 +15,11 @@ $rt->parse_user_params();
 // Items from tracker
 $flist = $rt->getFutureList();
 // Items from saved file
-$file = $rt->read_from_file();
+//$file = $rt->read_from_file();
+$file = Utils::read_from_file();
 
 $items_from_file = array();
+$new_items_counter = 0;
 
 ?>
 
@@ -55,8 +62,8 @@ $items_from_file = array();
 
         <div id="navbar" class="navbar-collapse collapse">
             <a href="mylist.php">
-                <button class="btn btn-warning btn-sm navbar-btn navbar-left" type="button">
-                    My list <span class="badge"><?= $rt->getFutureListSize() ?></span>
+                <button class="btn btn-warning btn-sm navbar-btn navbar-left items_counter" type="button">
+                    My list
                 </button>
             </a>
 
@@ -114,7 +121,10 @@ $items_from_file = array();
             ?>
         </div>
         <div class="col-md-2 button-div align-center">
-            <label for="save-btn">Save list to file</label>
+            <label for="save-btn">
+                Save new items to file
+                <span class="items_counter"></span>
+            </label>
             <button type="button" id="save-btn" class="btn btn-default" value="Save to file">
                 <span class="glyphicon glyphicon glyphicon-floppy-save"></span>
                 Save
@@ -160,23 +170,27 @@ $items_from_file = array();
             <tbody>
                 <?
                 for ($i = 0; $i < count($flist); $i++) {
-                    echo "<tr>";
                     if(array_key_exists('type', $flist[$i])){
                            if($flist[$i]['type'] == 'old'){
+                               echo "<tr data-item-type='old'>";
                                echo '<td class="align-center" title="Saved in file and in tracker list">
                                         <span class=" glyphicon glyphicon-asterisk color-orange"></span>
                                     </td>';
                            }elseif($flist[$i]['type'] == 'new'){
-                               echo '<td class="align-center" title="New item from tracker. Recommend save to file">
+                               echo "<tr data-item-type='new'>";
+                               echo '<td class="align-center"
+                                    title="New item from tracker. Recommend save to file">
                                         <span class="glyphicon glyphicon-flash color-green"></span>
                                     </td>';
+                               $new_items_counter++;
                            }
                     }else{
+                        echo "<tr>";
                         echo '<td> - </td>';
                     }
                     echo '<td><a href="' . $flist[$i]["topic_link"] . '">
                        ' . $flist[$i]['topic_name'] . ' </a></td>';
-                    echo '<td><a href="' . $flist[$i]['link'] . '">
+                    echo '<td class="data-item"><a href="' . $flist[$i]['link'] . '">
                     ' . $flist[$i]['name'] . '</a></td>';
                     echo '<td class="color-green align-center">' . $flist[$i]['seeds'] . '</td>';
                     echo '<td class="color-red align-center">' . $flist[$i]['leeches'] . '</td>';
@@ -203,6 +217,8 @@ $items_from_file = array();
     </div>
 
 </div>
+
+<div id="new_items_counter" data-count="<?=$new_items_counter?>"></div>
 
 </body>
 </html>
