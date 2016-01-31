@@ -116,7 +116,7 @@ $new_items_counter = 0;
                 <?if(count($file) > 1 && array_key_exists('error', $file)) {
                     echo  $file['error'];
                 }else{
-                    echo 'Successfully read from file';
+                    echo 'Successfully read saved torrents from bookmark file';
                     $items_from_file = $rt->compare_file_to_tracker_future_list($file, $flist);
                 }
                 ?>
@@ -196,7 +196,10 @@ $new_items_counter = 0;
 
 </div>
 
-<div id="new_items_counter" data-count="<?=$new_items_counter?>"></div>
+<div id="new_items_counter" data-count="<?=$new_items_counter?>">
+    <br>
+    <?= $c->udate_pending_items_count($new_items_counter); ?>
+</div>
 
 </body>
 </html>

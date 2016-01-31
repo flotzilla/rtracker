@@ -20,7 +20,7 @@ class Utils
     }
 
 public static function read_from_file(){
-        $file = dirname(__DIR__) . self::$future_list_file;
+        $file = self::get_parent_dir() . self::$future_list_file;
         $array_items = array();
         $errors = array();
 
@@ -58,7 +58,7 @@ public static function read_from_file(){
 
     }
     public static function save_future_list($list){
-        $file = dirname(__DIR__) . self::$future_list_file;
+        $file = self::get_parent_dir() . self::$future_list_file;
         $data_to_write = '';
         $errors = array();
 
@@ -77,10 +77,10 @@ public static function read_from_file(){
 
         if(is_writable($file)){
             if(file_put_contents($file, $data_to_write, FILE_APPEND) == false){
-                $errors['error'] = 'cannot write to file <code>' . $file . "</code>";
+                $errors['error'] = 'Cannot write to file <code>' . $file . "</code>";
             }
         }else{
-            $errors['error'] = 'file is not writable <code>' . $file . "</code>";
+            $errors['error'] = 'File is not writable <code>' . $file . "</code>";
         }
 
         return $errors;
@@ -92,5 +92,9 @@ public static function read_from_file(){
     public static function getFutureListFile()
     {
         return self::$future_list_file;
+    }
+
+    public static function get_parent_dir(){
+        return $_SERVER['DOCUMENT_ROOT'] . substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '/', 1));
     }
 }

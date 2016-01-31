@@ -21,10 +21,13 @@ $(document).ready(function(){
 
 
 function get_new_items_count(){
-    var new_items = $('#new_items_counter').attr('data-count');
+    var new_items = $('#new_items_counter');
+    var count = new_items.attr('data-count');
     $('.items_counter').each(function(){
-       $(this).append('<span class="badge">' + new_items + '</span>');
+       $(this).append('<span class="badge">' +  count + '</span>');
     });
+    var $info = $("#info-block");
+    $info.html($info.text() + '<br>' + new_items.text());
 }
 
 function buttons_handler(){
@@ -92,7 +95,7 @@ function post_save_list_action(resp){
             });
 
         }else if(resp.error){
-            $('#info-block').text(resp.error);
+            $('#info-block').html(resp.error);
         }
     }
 }

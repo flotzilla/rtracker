@@ -70,7 +70,7 @@ $rutor = new RutorAPI();
         <div id="navbar" class="navbar-collapse collapse">
             <a href="mylist.php">
                 <button class="btn btn-warning btn-sm navbar-btn navbar-left" type="button">
-                    My list <span class="badge"><?=$rt->getFutureListSize()?></span>
+                    My list <span class="badge"><?=$config['future-file']['pending-to-save']?></span>
                 </button>
             </a>
 
