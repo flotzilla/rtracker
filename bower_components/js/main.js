@@ -25,6 +25,10 @@ function get_new_items_count(){
     $('.items_counter').each(function(){
        $(this).append('<span class="badge">' + new_items + '</span>');
     });
+
+    if(new_items == 0){
+        $('#save-btn').attr('disabled', 'disabled');
+    }
 }
 
 function buttons_handler(){
@@ -73,7 +77,7 @@ function send_new_items(){
 function post_save_list_action(resp){
     if(resp != false){
         if(resp.status && resp.status == "saved"){
-            $('#info-block').text("Saved to file");
+            $('#info-block').text("Successfully saved to file");
             $('#new_items_counter').attr('data-count', 0);
 
             $('.items_counter').each(function(){
@@ -88,9 +92,6 @@ function post_save_list_action(resp){
                     span.removeClass('glyphicon-flash');
                     span.removeClass('color-green');
                     span.addClass('color-orange glyphicon-asterisk');
-
-                    $('#save-btn').attr('disabled', 'disabled');
-
                 }
             });
 
