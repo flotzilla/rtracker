@@ -25,10 +25,6 @@ function get_new_items_count(){
     $('.items_counter').each(function(){
        $(this).append('<span class="badge">' + new_items + '</span>');
     });
-
-    if(new_items == 0){
-        $('#save-btn').attr('disabled', 'disabled');
-    }
 }
 
 function buttons_handler(){
