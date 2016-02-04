@@ -1637,7 +1637,7 @@ if(isset($_GET['search'])){
                         <span class="glyphicon glyphicon-arrow-down cursor-pointer"></span>
                     </a>
                     <span title="Add to future list"
-                    onclick="add_rutr_item(this)"
+                    onclick="add_single_item(this)"
                     data-action-type="add"
                     class="glyphicon glyphicon-ok-circle color-green cursor-pointer"></span>
 
@@ -1692,8 +1692,14 @@ if(isset($_GET['search'])){
                     }
                     echo "<tr>";
                     echo "<td class='align-center'>" . $rutor_search[$i]['added']."</td>";
-                    echo "<td><a href='" .$rutor_search[$i]['torrent_view_link'] . "'>".
-                        $rutor_search[$i]['torrent_text']."</a></td>";
+                    echo "<td><a href='" .$rutor_search[$i]['torrent_view_link'] . " '
+                    class='item-data'>".
+                        $rutor_search[$i]['torrent_text']."</a>"
+                        .'&nbsp; <span title="Add to future list"
+                        onclick="add_single_item(this)"
+                        data-action-type="add"
+                        class="glyphicon glyphicon-ok-circle color-green cursor-pointer"></span>
+                    </td>';
                     echo "<td class='align-center'>" . $rutor_search[$i]['size']."</td>";
                     echo "<td class='align-center color-green'>" . $rutor_search[$i]['seeders']."</td>";
                     echo "<td class='align-center color-red'>" . $rutor_search[$i]['leeches']."</td>";

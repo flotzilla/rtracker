@@ -19,7 +19,7 @@ class Utils
         return iconv($from, 'UTF-8', $str);
     }
 
-public static function read_from_file(){
+    public static function read_from_file(){
         $file = self::get_parent_dir() . self::$future_list_file;
         $array_items = array();
         $errors = array();
@@ -57,7 +57,7 @@ public static function read_from_file(){
         }
 
     }
-    public static function save_future_list($list){
+    public static function save_future_list($list, $save_type=FILE_APPEND){
         $file = self::get_parent_dir() . self::$future_list_file;
         $data_to_write = '';
         $errors = array();
@@ -72,11 +72,11 @@ public static function read_from_file(){
         }
 
         foreach($list as $el){
-            $data_to_write .= $el['name'] . " ::: " .$el['link'] . "\n";
+            $data_to_write .= trim($el['name']) . " ::: " .$el['link'] . "\n";
         }
 
         if(is_writable($file)){
-            if(file_put_contents($file, $data_to_write, FILE_APPEND) == false){
+            if(file_put_contents($file, $data_to_write, $save_type) == false){
                 $errors['error'] = 'Cannot write to file <code>' . $file . "</code>";
             }
         }else{
@@ -84,6 +84,30 @@ public static function read_from_file(){
         }
 
         return $errors;
+    }
+
+
+    /**
+     * @param $files_to_remove array with items to remove
+     * @return array
+     */
+    public static function remove_from_future_list($files_to_remove){
+        $file_items = self::read_from_file();
+        $count = count($file_items);
+        $isFound = array();
+
+        foreach($files_to_remove as $item_to_rem){
+            for($i =0 ; $i < $count; $i++){
+                //will do not check on torrents name, cause they can be changed
+                if($item_to_rem['link'] == $file_items[$i]['link']){
+                    $isFound[] = $file_items[$i];
+                    unset($file_items[$i]);
+                }
+            }
+        }
+
+        self::save_future_list($file_items, null);
+        return $isFound;
     }
 
     /**

@@ -57,17 +57,17 @@ function grab_new_items(){
     }
 
     items = JSON.stringify(items);
-   ajax_list_action(items, 'save-list', 'save-all', post_grub_send_action)
+   ajax_list_action(items, 'save-to-list', 'save-all', post_grub_send_action)
 }
 
-function ajax_list_action(items, type, action_params, post_action, post_obj){
+function ajax_list_action(items, action_type, action_params, post_action, post_obj){
     var req = $.ajax({
         url: "classes/xmlhttpreq/list_action.php",
         type: 'json',
         method: 'post',
         data: {
             data: items,
-            action: type,
+            action: action_type,
             "action-type": action_params
         },
         success: function(){
@@ -111,27 +111,27 @@ function post_grub_send_action(resp){
 
 
 /*
-    add/remove rutracker single item to/from future list
+    add/remove single item to/from future list
  */
-function add_rutr_item(obj){
+function add_single_item(obj){
     var type = $(obj).attr('data-action-type');
+    var item = $(obj).parent().find('a.item-data');
+    var name = item.text().trim();
+    var href = item.attr('href').trim();
+    var items = [];
+
+    items.push({
+        "name": name,
+        "link": href
+    });
+
+    items = JSON.stringify(items);
+
     if(type == "add"){
-        var item = $(obj).parent().find('a.item-data');
-        var name = item.text().trim();
-        var href = item.attr('href');
-
-        var items = [];
-        items.push({
-            "name": name,
-            "link": href
-        });
-
-        items = JSON.stringify(items);
-
-        ajax_list_action(items, 'save-list', 'new', post_new_item_action, obj);
+        ajax_list_action(items, 'save-to-list', 'single', post_new_item_action, obj);
 
     }else if(type == "remove"){
-        console.log('will remove from list');
+        ajax_list_action(items, 'remove-from-list', 'single', post_remove_item_action, obj);
     }
 }
 
@@ -144,6 +144,19 @@ function post_new_item_action(resp, object){
         j_ob.attr('title', 'Remove from future list');
     }else if(resp.error){
         //do something with it
+        console.log(resp.error);
+    }
+}
+
+function post_remove_item_action(resp, object){
+    if(resp.status && resp.status == "ok"){
+        var j_ob = $(object);
+        j_ob.removeClass('glyphicon-remove-circle color-red');
+        j_ob.addClass('glyphicon-ok-circle color-green');
+        j_ob.attr('data-action-type', 'add');
+        j_ob.attr('title', 'Add to future list');
+    }else{
+        console.log('ouuups. Cannot remove item from future list');
         console.log(resp.error);
     }
 }
