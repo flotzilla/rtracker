@@ -31,10 +31,13 @@ function get_new_items_count(){
 }
 
 function buttons_handler(){
-    document.getElementById('save-btn').addEventListener('click', send_new_items);
+    var save_btn = document.getElementById('save-btn');
+    if(save_btn != undefined){
+        save_btn.addEventListener('click', grab_new_items);
+    }
 }
 
-function send_new_items(){
+function grab_new_items(){
     var items = [];
     $('tr').each(function(){
         if($(this).attr('data-item-type') == 'new'){
@@ -54,26 +57,32 @@ function send_new_items(){
     }
 
     items = JSON.stringify(items);
+   ajax_list_action(items, 'save-list', 'save-all', post_grub_send_action)
+}
+
+function ajax_list_action(items, type, action_params, post_action, post_obj){
     var req = $.ajax({
         url: "classes/xmlhttpreq/list_action.php",
         type: 'json',
         method: 'post',
         data: {
-            action: 'save-list',
-            data: items
+            data: items,
+            action: type,
+            "action-type": action_params
         },
         success: function(){
             var resp = JSON.parse(req.responseText);
-            post_save_list_action(resp);
+            if(post_action !== undefined){
+                post_action(resp, post_obj);
+            }
         },
         error: function(){
             console.log(this);
         }
     });
-
 }
 
-function post_save_list_action(resp){
+function post_grub_send_action(resp){
     if(resp != false){
         if(resp.status && resp.status == "saved"){
             $('#info-block').text("Successfully saved to file");
@@ -97,5 +106,44 @@ function post_save_list_action(resp){
         }else if(resp.error){
             $('#info-block').html(resp.error);
         }
+    }
+}
+
+
+/*
+    add/remove rutracker single item to/from future list
+ */
+function add_rutr_item(obj){
+    var type = $(obj).attr('data-action-type');
+    if(type == "add"){
+        var item = $(obj).parent().find('a.item-data');
+        var name = item.text().trim();
+        var href = item.attr('href');
+
+        var items = [];
+        items.push({
+            "name": name,
+            "link": href
+        });
+
+        items = JSON.stringify(items);
+
+        ajax_list_action(items, 'save-list', 'new', post_new_item_action, obj);
+
+    }else if(type == "remove"){
+        console.log('will remove from list');
+    }
+}
+
+function post_new_item_action(resp, object){
+    if(resp.status && resp.status == "saved"){
+        var j_ob = $(object);
+        j_ob.removeClass('glyphicon-ok-circle color-green');
+        j_ob.addClass('glyphicon-remove-circle color-red');
+        j_ob.attr('data-action-type', 'remove');
+        j_ob.attr('title', 'Remove from future list');
+    }else if(resp.error){
+        //do something with it
+        console.log(resp.error);
     }
 }

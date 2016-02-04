@@ -1630,12 +1630,17 @@ if(isset($_GET['search'])){
                 }
                 echo '<td><a href="index.php?' . $rt_result[$i]["section_link_search"] . '&nm='.$search_str.'">
                        ' . $rt_result[$i]['section'] . ' </a></td>';
-                echo '<td><a href="' . $rt_result[$i]['torrent_view_link'] . '">
+                echo '<td><a href="' . $rt_result[$i]['torrent_view_link'] . '" class="item-data">
                     ' . $rt_result[$i]['torrent_text'] . '</a>
                      <a class="color-orange" href="'.$rt_result[$i]['torrent_link'].'"
                      title="Download torrent file">
                         <span class="glyphicon glyphicon-arrow-down cursor-pointer"></span>
                     </a>
+                    <span title="Add to future list"
+                    onclick="add_rutr_item(this)"
+                    data-action-type="add"
+                    class="glyphicon glyphicon-ok-circle color-green cursor-pointer"></span>
+
                 </td>';
                 echo '<td class="font12"><a href="' . $rt->getProfilePage() . $rt_result[$i]['author_link'] . '">
                     ' . $rt_result[$i]['author'] . '</a></td>';

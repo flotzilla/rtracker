@@ -18,9 +18,18 @@ if(isset($_POST['action'])){
                         echo json_encode($result);
                     }
                     else{
-                        ob_start();
-                        update_and_supress_output($data);
-                        ob_end_clean();
+                        if(isset($_POST['action-type'])){
+                            $action_type = $_POST['action-type'];
+                            if($action_type == 'save-all'){
+                                ob_start();
+                                update_and_supress_output($data);
+                                ob_end_clean();
+                            }
+                            if($action_type == 'new'){
+                                //do nothing
+                            }
+                        }
+
                         echo json_encode(array('status' => 'saved'));
                     }
                 }else send_error('cannot parse json data');
