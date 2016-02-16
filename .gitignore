@@ -1,5 +1,5 @@
 /config/config.json
 /bower_components/bootstrap/**
 /bower_components/jquery/**
-/tmp
+/tmp/**
 /.idea/**
