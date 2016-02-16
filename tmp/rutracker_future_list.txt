@@ -42,6 +42,3 @@ Wes McKinney / Уэс Маккинни - Python и анализ данных [20
 [Lynda.com / Joe Chellman] Debugging the Web: JavaScript [2015, ENG] ::: http://rutracker.org/forum/viewtopic.php?t=5059516
 JetBrains IntelliJ IDEA 15.0.3 Ultimate [2016, ENG] ::: http://rutracker.org/forum/viewtopic.php?t=4864236
 Justin Seitz - Black Hat Python [2014, PDF, ENG] ::: http://rutracker.org/forum/viewtopic.php?t=5080453
-Some title ::: http://rutracker.org/forum/viewtopic.php?t=error
-(Thrash Metal) [CD] Megadeth - Dystopia (Best Buy Edition) - 2016, FLAC (tracks+.cue), lossless ::: http://rutracker.org/forum/viewtopic.php?t=5155731
-(Thrash Metal) Megadeth - Dystopia (Deluxe Edition) - 2016, MP3, 320 kbps ::: http://rutracker.org/forum/viewtopic.php?t=5155191

@@ -143,17 +143,20 @@ $new_items_counter = 0;
                 <th class="align-center" data-sortable="true">Torrent</th>
                 <th class="align-center" data-sortable="true">Seeders</th>
                 <th class="align-center" data-sortable="true">Leechers</th>
+                <th class="align-center" data-sortable="true">Action</th>
             </tr>
             </thead>
             <tbody>
                 <?
                 for ($i = 0; $i < count($flist); $i++) {
+                    $isOld = false;
                     if(array_key_exists('type', $flist[$i])){
                            if($flist[$i]['type'] == 'old'){
                                echo "<tr data-item-type='old'>";
                                echo '<td class="align-center" title="Saved in file and in tracker list">
                                         <span class=" glyphicon glyphicon-asterisk color-orange"></span>
                                     </td>';
+                               $isOld = true;
                            }elseif($flist[$i]['type'] == 'new'){
                                echo "<tr data-item-type='new'>";
                                echo '<td class="align-center"
@@ -172,6 +175,17 @@ $new_items_counter = 0;
                     ' . $flist[$i]['name'] . '</a></td>';
                     echo '<td class="color-green align-center">' . $flist[$i]['seeds'] . '</td>';
                     echo '<td class="color-red align-center">' . $flist[$i]['leeches'] . '</td>';
+                    if($isOld){
+                        echo "<td class='align-center'>"
+                            .'<span title="Remove from future list"
+                        data-action-type="remove"
+                        class="my-list-rm glyphicon glyphicon-remove-circle color-red cursor-pointer"></span>'
+                            ."</td>";
+                    }else{
+                        echo "<td class='align-center'>
+                                <span class='glyphicon glyphicon-ban-circle cursor-pointer'></span>
+                            </td>";
+                    }
                     echo "</tr>";
                 }
                 if(count($items_from_file) > 0) {
@@ -182,9 +196,15 @@ $new_items_counter = 0;
                             <span class='glyphicon glyphicon-floppy-disk col-more-gray'></span>
                             </td>";
                         echo "<td class='align-center'> - </td>";
-                        echo "<td><a href='".$item['link'] . "'>" . $item['name'] . "</a></td>";
+                        echo "<td class='data-item'><a href='".$item['link'] . "'>" . $item['name'] . "</a></td>";
                         echo "<td class='align-center cursor-pointer' title='Get seeders count'> ? </td>";
                         echo "<td class='align-center cursor-pointer' title='Get leechers count'> ? </td>";
+                        echo "<td class='align-center'>"
+                            .'<span title="Remove from future list"
+                        data-action-type="remove"
+                        class="my-list-rm glyphicon glyphicon-remove-circle
+                         color-red cursor-pointer"></span>'
+                             ."</td>";
                         echo "</tr>";
                     }
                 }

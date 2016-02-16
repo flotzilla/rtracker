@@ -35,7 +35,12 @@ function buttons_handler(){
     if(save_btn != undefined){
         save_btn.addEventListener('click', grab_new_items);
     }
+
+    $('.my-list-rm').on('click', function(){
+        remove_from_my_list($(this));
+    });
 }
+
 
 function grab_new_items(){
     var items = [];
@@ -159,4 +164,25 @@ function post_remove_item_action(resp, object){
         console.log('ouuups. Cannot remove item from future list');
         console.log(resp.error);
     }
+}
+
+function remove_from_my_list(obj) {
+    var parent = $(obj).closest('tr');
+    var a = parent.find('td.data-item').find('a');
+    var link = a.attr('href').trim();
+    var text = a.text().trim();
+
+    var items = [];
+    items.push({
+            name: text,
+            link: link
+        });
+
+    items = JSON.stringify(items);
+
+    var remove = function(){
+      parent.remove();
+    };
+    ajax_list_action(items, 'remove-from-list', 'single', remove, obj);
+
 }
