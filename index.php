@@ -1561,14 +1561,19 @@ if(isset($_GET['search'])){
         $groups = "";
 
         if(isset($_GET['f'])){
-            for($i = 0; $i< count($_GET['f']); $i++){
-                if($i == 0){
-                    $groups .= $_GET['f'][$i];
-                }  else{
-                    $groups .= ",". $_GET['f'][$i];
+            $count = count($_GET['f']);
+            $is_arr = is_array($_GET['f']);
+            if(!is_array($_GET['f'])){
+                $groups = $_GET['f'];
+            }else{
+                for($i = 0; $i< count($_GET['f']); $i++){
+                    if($i == 0){
+                        $groups .= $_GET['f'][$i];
+                    }  else{
+                        $groups .= ",". $_GET['f'][$i];
+                    }
                 }
             }
-
         }else{ $groups = 'f[]=-1';}
 
         if(isset($_GET['pn'])){ $pn = $_GET['pn'];}
