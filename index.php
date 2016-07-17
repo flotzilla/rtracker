@@ -1560,12 +1560,16 @@ if(isset($_GET['search'])){
         $oop = 0;
         $groups = "";
 
-        if(isset($_GET['f'])){
-            for($i = 0; $i< count($_GET['f']); $i++){
-                if($i == 0){
-                    $groups .= $_GET['f'][$i];
-                }  else{
-                    $groups .= ",". $_GET['f'][$i];
+        if (isset($_GET['f'])) {
+            if (!is_array($_GET['f'])) {
+                $groups = $_GET['f'];
+            } else {
+                for ($i = 0; $i < count($_GET['f']); $i++) {
+                    if ($i == 0) {
+                        $groups .= $_GET['f'][$i];
+                    } else {
+                        $groups .= "," . $_GET['f'][$i];
+                    }
                 }
             }
 
@@ -1628,7 +1632,7 @@ if(isset($_GET['search'])){
                 }else{
                     echo '<td class="align-center cursor-pointer" title="'.$rt_result[$i]['status'].'"><span class="glyphicon glyphicon glyphicon-asterisk"></span></td>';
                 }
-                echo '<td><a href="index.php?' . $rt_result[$i]["section_link_search"] . '&nm='.$search_str.'">
+                echo '<td><a href="index.php?' . $rt_result[$i]["section_link_search"] . '&search='.$search_str.'">
                        ' . $rt_result[$i]['section'] . ' </a></td>';
                 echo '<td><a href="' . $rt_result[$i]['torrent_view_link'] . '" class="item-data">
                     ' . $rt_result[$i]['torrent_text'] . '</a>
