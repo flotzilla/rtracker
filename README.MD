@@ -18,7 +18,10 @@ Search in:
 
 ##Preparation
 
-File `/tmp/rt_cookie.txt` and `/tmp/rutor_cookie`must be writable
+File `tmp/rt_cookie.txt`, `tmp/rutor_cookie` and 
+`tmp/rutracker_future_list.txt` must be writable
+
+Also `config/config.json` file must have read/write permissions. 
 
 Run before first launch:
 
@@ -32,6 +35,10 @@ Fill config.json file with your rutracker.org params
   "rutracker": {
     "username" : "your_username",  
     "password" : "password",  
-    } 
+    },
+  "search-in":{   //set search options to true if you wanna use specified search engine
+    "rutracker" : true,
+    "rutor" : true
+  }
 }  
 `
