@@ -37,7 +37,11 @@ $flist = $rt->getFutureList();
 include "page/header.php";
 ?>
 <div class="container main-cont">
-    <h2 class="align-center">About page</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-header">About page</h2>
+        </div>
+    </div>
 </div>
 
 

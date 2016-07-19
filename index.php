@@ -1,14 +1,8 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
-
-
 include_once "classes/API/RutrackerAPI.php";
 include_once "classes/API/RutorAPI.php";
 include "ConfigReader.php";
 include_once "classes/Utils.php";
-
 
 $c = new ConfigReader();
 $config = $c->getConfig();
@@ -21,6 +15,8 @@ $rt->parse_user_params();
 $flist = $rt->getFutureList();
 
 $rutor = new RutorAPI();
+
+$rt_result = $rutor_search = [];
 
 ?>
 <!DOCTYPE html>
@@ -153,8 +149,8 @@ if(isset($_GET['search'])){
             'nm' => $search_str
         );
 
-        $rt_result = $rt->search($search_str, $options);
-        $rutor_search= $rutor->search($search_str);
+        if($config['search-in']['rutracker']) $rt_result = $rt->search($search_str, $options);
+        if($config['search-in']['rutor']) $rutor_search= $rutor->search($search_str);
 
     }
 

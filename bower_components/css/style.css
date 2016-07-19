@@ -95,3 +95,7 @@ body{
 #new_items_counter{
     display: none;
 }
+
+.ul-list{
+    list-style-type: none;
+}

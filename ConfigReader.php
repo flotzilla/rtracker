@@ -33,7 +33,7 @@ class ConfigReader
         }
     }
 
-    private function save_config_to_file(){
+    public function save_config_to_file(){
         $result = file_put_contents(self::$default_conf_file, json_encode($this->config));
         if($result == false){
             return 'Error. Cannot save config.json data';
@@ -50,11 +50,11 @@ class ConfigReader
         return $this->config;
     }
 
-    public function save_param($param, $key, $value){
+    public function save_param($param, $key, $value, $save=true){
         if(array_key_exists($param, $this->config)){
             if(array_key_exists($key, $this->config[$param])){
                 $this->config[$param][$key] = $value;
-                return $this->save_config_to_file();
+                if($save) return $this->save_config_to_file();
             }
         }
 

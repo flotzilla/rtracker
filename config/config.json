@@ -1,1 +1,13 @@
-{"rutracker":{"username":"xxxx","password":"xxxx"},"future-file":{"pending-to-save":4}}
+{
+  "rutracker": {
+    "username": "xxxx",
+    "password": "xxxx"
+  },
+  "future-file": {
+    "pending-to-save": 0
+  },
+  "search-in": {
+    "rutracker": true,
+    "rutor": true
+  }
+}
