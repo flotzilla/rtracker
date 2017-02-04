@@ -7,7 +7,7 @@
 
 class RutrackerAPI
 {
-    private static $login_page = 'http://login.rutracker.org/forum/login.php';
+    private static $login_page = 'http://rutracker.org/forum/login.php';
     private static $future_list_page = 'http://rutracker.org/forum/search.php?dlw=1&dlu=';
     private static $profile_page = 'http://rutracker.org/forum/profile.php?mode=viewprofile&u=';
     private static $main_page = 'http://rutracker.org/forum/';
